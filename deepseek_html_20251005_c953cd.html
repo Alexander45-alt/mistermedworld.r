@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MisterMedWorld - Донат для Minecraft сервера</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --primary-dark: #1b5e20;
+            --accent: #ff9800;
+            --dark: #121212;
+            --light: #f5f5f5;
+            --gray: #424242;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(18, 18, 18, 0.95);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-login {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--light);
+        }
+        
+        .btn-register {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+        
+        .hero-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn-hero {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+        }
+        
+        /* Donations Section */
+        .donations {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        
+        .donation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .donation-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .donation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-header {
+            padding: 20px;
+            text-align: center;
+            background: var(--primary);
+        }
+        
+        .card-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .card-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .card-features li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .btn-buy {
+            width: 100%;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        
+        /* Instructions */
+        .instructions {
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            line-height: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-column h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>MisterMedWorld</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#donations">Донаты</a></li>
+                        <li><a href="#instructions">Как купить</a></li>
+                        <li><a href="#about">О сервере</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-login">Войти</button>
+                    <button class="btn btn-register">Регистрация</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Улучши свой опыт в MisterMedWorld</h2>
+                <p>Получи эксклюзивные привилегии и уникальные возможности на нашем Minecraft сервере. Выбери подходящий донат и стань частью элитного сообщества!</p>
+                <button class="btn btn-hero">Выбрать донат</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donations Section -->
+    <section class="donations" id="donations">
+        <div class="container">
+            <h2 class="section-title">Выбери свой донат</h2>
+            <div class="donation-grid">
+                <!-- VIP -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Вип</h3>
+                        <div class="card-price">299 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Префикс в чате [VIP]</li>
+                            <li>Доступ к команде /hat</li>
+                            <li>Цветной ник в табе</li>
+                            <li>Доступ к /feed и /heal</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Титан -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Титан</h3>
+                        <div class="card-price">599 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности VIP</li>
+                            <li>Префикс [Титан]</li>
+                            <li>Доступ к /ec</li>
+                            <li>Возможность починить предметы</li>
+                            <li>Дополнительные варпы</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Кинг -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Кинг</h3>
+                        <div class="card-price">899 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Титана</li>
+                            <li>Префикс [Кинг]</li>
+                            <li>Доступ к /craft</li>
+                            <li>Увеличенный лимит домов</li>
+                            <li>Особые частицы</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Рыцарь -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Рыцарь</h3>
+                        <div class="card-price">1199 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Кинга</li>
+                            <li>Префикс [Рыцарь]</li>
+                            <li>Доступ к /fix all</li>
+                            <li>Особый набор при входе</li>
+                            <li>Доступ к приватному варпу</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Оверлорд -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Оверлорд</h3>
+                        <div class="card-price">1499 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Рыцаря</li>
+                            <li>Префикс [Оверлорд]</li>
+                            <li>Доступ к /tpahere</li>
+                            <li>Уникальные крылья</li>
+                            <li>Приватный канал в Discord</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Драгон -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Драгон</h3>
+                        <div class="card-price">1999 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Оверлорда</li>
+                            <li>Префикс [Драгон]</li>
+                            <li>Доступ к /enderchest</li>
+                            <li>Особый эффект дракона</li>
+                            <li>Возможность летать в основных мирах</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Владелец -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Владелец</h3>
+                        <div class="card-price">2499 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Драгона</li>
+                            <li>Префикс [Владелец]</li>
+                            <li>Доступ к /nick</li>
+                            <li>Особый набор брони</li>
+                            <li>Возможность создавать свои варпы</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Призрак -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Призрак</h3>
+                        <div class="card-price">2999 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Владельца</li>
+                            <li>Префикс [Призрак]</li>
+                            <li>Невидимость в табе</li>
+                            <li>Доступ к /vanish</li>
+                            <li>Особые способности невидимости</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+                
+                <!-- Бог -->
+                <div class="donation-card">
+                    <div class="card-header">
+                        <h3>Бог</h3>
+                        <div class="card-price">4999 ₽</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li>Все возможности Призрака</li>
+                            <li>Префикс [Бог]</li>
+                            <li>Все доступные команды</li>
+                            <li>Эксклюзивные частицы</li>
+                            <li>Особый статус на сервере</li>
+                            <li>Личный помощник на 7 дней</li>
+                        </ul>
+                        <button class="btn btn-buy">Купить сейчас</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instructions -->
+    <section class="instructions" id="instructions">
+        <div class="container">
+            <h2 class="section-title">Как приобрести донат</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Выбери привилегию</h3>
+                    <p>Ознакомься с доступными донатами и выбери подходящий для себя</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Оплати удобным способом</h3>
+                    <p>Мы принимаем карты, электронные кошельки и другие популярные методы оплаты</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Получи привилегию</h3>
+                    <p>После оплаты привилегия автоматически активируется на вашем аккаунте</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacts">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>MisterMedWorld</h3>
+                    <p>Лучший Minecraft сервер с уникальным геймплеем и дружным комьюнити. Присоединяйся к нам!</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Быстрые ссылки</h3>
+                    <ul>
+                        <li><a href="#donations">Донаты</a></li>
+                        <li><a href="#instructions">Как купить</a></li>
+                        <li><a href="#about">О сервере</a></li>
+                        <li><a href="#rules">Правила</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>IP: play.mistermedworld.ru</li>
+                        <li>Discord: discord.gg/mistermedworld</li>
+                        <li>Email: support@mistermedworld.ru</li>
+                        <li>VK: vk.com/mistermedworld</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 MisterMedWorld.ru. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Простая логика для плавной прокрутки
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Обработка кнопок покупки
+        document.querySelectorAll('.btn-buy').forEach(button => {
+            button.addEventListener('click', function() {
+                const donationName = this.closest('.donation-card').querySelector('h3').textContent;
+                alert(`Вы выбрали донат: ${donationName}. В ближайшее время с вами свяжется администратор для завершения покупки.`);
+            });
+        });
+    </script>
+</body>
+</html>
